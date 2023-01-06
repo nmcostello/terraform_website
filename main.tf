@@ -11,9 +11,9 @@
 # Configure the web server autoscaling group
 resource "aws_autoscaling_group" "web" {
   name                  = "${var.project}-asg"
-  min_size              = 1
-  max_size              = 10
-  desired_capacity      = 2
+  min_size              = var.min_asg_size
+  max_size              = var.max_asg_size
+  desired_capacity      = var.desired_asg_size
   vpc_zone_identifier   = ["subnet-12345678"]
   launch_configuration = "${aws_launch_configuration.web.name}"
 
@@ -24,7 +24,7 @@ resource "aws_autoscaling_group" "web" {
 resource "aws_launch_configuration" "web" {
   name                            = "${var.project}-lc"
   image_id                        = "ami-12345678"
-  instance_type                   = "t2.micro"
+  instance_type                   = var.instance_type
   security_groups                 = [aws_security_group.web.id]
   associate_public_ip_address     = true
 
