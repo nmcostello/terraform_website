@@ -1,0 +1,18 @@
+name: Deploy AWS Resources in Terraform
+run-name: ${{ github.actor }} deployed the Terraform code to AWS.
+on: [push]
+
+jobs:
+  deploy-terraform-aws:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🚀 Running terraform code 🚀"
+      - run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "AWS=${{ env.AWS_ACCESS_KEY_ID }}"
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Run terraform deployment script
+        run: |
+          bash deploy.sh
+      - run: echo "🍏 This job's status is ${{ job.status }}."
