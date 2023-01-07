@@ -10,44 +10,25 @@
 
 # Configure the web server autoscaling group
 resource "aws_autoscaling_group" "web" {
-  name                  = "${var.project}-asg"
-  min_size              = var.min_asg_size
-  max_size              = var.max_asg_size
-  desired_capacity      = var.desired_asg_size
-  vpc_zone_identifier   = ["subnet-12345678"]
-  launch_configuration = "${aws_launch_configuration.web.name}"
+  name                 = "${var.project}-asg"
+  min_size             = var.min_asg_size
+  max_size             = var.max_asg_size
+  desired_capacity     = var.desired_asg_size
+  vpc_zone_identifier  = ["subnet-12345678"]
+  launch_configuration = aws_launch_configuration.web.name
 
   # Add any other required configuration for the autoscaling group here
 }
 
 # Configure the launch configuration for the web server
 resource "aws_launch_configuration" "web" {
-  name                            = "${var.project}-lc"
-  image_id                        = "ami-12345678"
-  instance_type                   = var.instance_type
-  security_groups                 = [aws_security_group.web.id]
-  associate_public_ip_address     = true
+  name                        = "${var.project}-lc"
+  image_id                    = "ami-12345678"
+  instance_type               = var.instance_type
+  security_groups             = [aws_security_group.web.id]
+  associate_public_ip_address = true
 
   # Add any other required configuration for the launch configuration here
-}
-
-# Create a target group for the web server
-resource "aws_lb_target_group" "web" {
-  name        = "${var.project}"
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "instance"
-
-  # Add the web server autoscaling group as a target
-  targets {
-    id = "${aws_autoscaling_group.web.arn}"
-  }
-}
-
-# Create an SSL certificate
-resource "aws_acm_certificate" "ssl" {
-  domain_name       = "example.com"
-  validation_method = "DNS"
 }
 
 # Create a security group for the load balancer
@@ -59,56 +40,52 @@ resource "aws_security_group" "lb" {
 }
 
 # Create the load balancer
-resource "aws_lb" "lb" {
+resource "aws_lb" "web" {
   name            = "${var.project}-lb"
   security_groups = [aws_security_group.lb.id]
 
+  subnets = [for subnet in aws_subnet.public : subnet.id]
+
   # Add any other required configuration for the load balancer here
 
-  # Enable HTTPS listener on port 443
-  https_listener {
-    port               = 443
-    certificate_arn    = aws_acm_certificate.ssl.arn
-    ssl_policy         = "ELBSecurityPolicy-TLS-1-2-2017-01"
-    default_action {
-      type = "redirect"
-      redirect {
-        protocol = "HTTPS"
-        port     = 443
-        host     = "#{aws_lb.lb.dns_name}"
-        path     = "/#{uri}"
-        query    = "#{query}"
-        status   = "HTTP_301"
-      }
+}
+# Enable HTTPS listener on port 443
+resource "aws_lb_listener" "web" {
+  load_balancer_arn = aws_lb.web.arn
+  port              = 80
+  certificate_arn   = aws_acm_certificate.ssl.arn
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      protocol    = "HTTPS"
+      port        = 443
+      status_code = "HTTP_301"
     }
   }
 }
 
-# Create a listener rule to redirect HTTP traffic to HTTPS
-resource "aws_lb_listener_rule" "redirect" {
-  listener_arn = aws_lb.lb.https_listener_arn
-  priority     = 1
+# Create a target group for the web server
+resource "aws_lb_target_group" "web" {
+  name        = var.project
+  port        = 443
+  protocol    = "HTTP"
+  target_type = "instance"
 
-  action {
-    type             = "redirect"
-    redirect {
-      protocol        = "HTTPS"
-      port            = 443
-      host            = "#{aws_lb.lb.dns_name}"
-      path            = "/#{uri}"
-      query           = "#{query}"
-      status_code     = "HTTP_301"
-    }
+  # Add the web server autoscaling group as a target
+  targets {
+    id = aws_autoscaling_group.web.arn
   }
+}
 
-  condition {
-    field  = "path-pattern"
-    values = ["/*"]
-  }
+# Create an SSL certificate
+resource "aws_acm_certificate" "ssl" {
+  domain_name       = aws_lb.web.dns_name
+  validation_method = "DNS"
 
-  # Add the target group as a condition
-  condition {
-    field  = "host-header"
-    values = [aws_lb_target_group.web.dns_name]
-  }
+  depends_on = [
+    aws_lb.web
+  ]
 }
