@@ -29,9 +29,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_desired_asg_size"></a> [desired\_asg\_size](#input\_desired\_asg\_size) | Desired size for the Autoscaling group | `number` | `2` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | Instance type to use for the web server. Defaulted to a smaller one for testing. | `string` | `"t2.micro"` | no |
 | <a name="input_max_asg_size"></a> [max\_asg\_size](#input\_max\_asg\_size) | Maximum size for the Autoscaling group | `number` | `10` | no |
-| <a name="input_min_asg_size"></a> [min\_asg\_size](#input\_min\_asg\_size) | Desired size for the Autoscaling group | `number` | `2` | no |
+| <a name="input_min_asg_size"></a> [min\_asg\_size](#input\_min\_asg\_size) | Minimum size for the Autoscaling group | `number` | `1` | no |
 | <a name="input_project"></a> [project](#input\_project) | Name for the project to be deployed | `string` | `"hello-world"` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | VPC to deploy to | `string` | n/a | yes |
 
