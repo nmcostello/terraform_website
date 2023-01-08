@@ -19,7 +19,7 @@ jobs:
         run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
 
       - name: print secret length
-        runs: |
+        run: |
           echo "$AWS_ACCESS_KEY_ID"
           echo "${#AWS_ACCESS_KEY_ID}"
         
