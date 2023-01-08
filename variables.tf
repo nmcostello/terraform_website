@@ -10,12 +10,12 @@ variable "vpc" {
 }
 
 variable "public_subnets" {
-  type = list
+  type        = list(any)
   description = "Public subnets for the LB"
 }
 
 variable "private_subnets" {
-  type = list
+  type        = list(any)
   description = "Private subnets for the EC2s"
 }
 

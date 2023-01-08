@@ -1,16 +1,16 @@
 # Configure the AWS Provider
 provider "aws" {
-  version = "~> 2.0"
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 terraform {
   backend "s3" {
-    bucket   = "challenge-tf-state"
-    key      = "terraform.tfstate"
+    bucket = "challenge-tf-state"
+    key    = "terraform.tfstate"
     region = "us-east-1"
   }
 }
+
 
 
 # Configure the web server autoscaling group
