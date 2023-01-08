@@ -8,6 +8,7 @@ terraform {
   backend "s3" {
     bucket   = "challenge-tf-state"
     key      = "terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
