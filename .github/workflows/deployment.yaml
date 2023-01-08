@@ -6,13 +6,23 @@ jobs:
   deploy-terraform-aws:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🚀 Running terraform code 🚀"
+      - uses: hashicorp/setup-terraform@v2
+      - uses: actions/checkout@v3
       - run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "AWS=${{ env.AWS_ACCESS_KEY_ID }}"
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - name: Run terraform deployment script
-        run: |
-          bash deploy.sh
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: format
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: initialize
+        id: init
+        run: terraform init
+
+      - name: validate
+        id: validate
+        run: terraform validate
+        
+      - name: plan
+        id: plan
+        run: terraform plan
