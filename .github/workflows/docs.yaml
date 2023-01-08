@@ -4,8 +4,6 @@ on: [pull-request]
 
 jobs:
   docs:
-    on:
-      - pull_request
     jobs:
       docs:
         runs-on: ubuntu-latest
