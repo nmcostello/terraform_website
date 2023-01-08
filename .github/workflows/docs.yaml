@@ -1,6 +1,6 @@
 name: Update Terraform docs on PR
 run-name: ${{ github.actor }} updated the Terraform docs.
-on: [pull-request]
+on: [pull_request]
 
 jobs:
   docs:
