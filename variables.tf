@@ -27,7 +27,7 @@ variable "max_asg_size" {
   default     = 10
 }
 
-variable "min_asg_size" {
+variable "desired_asg_size" {
   type        = number
   description = "Desired size for the Autoscaling group"
   default     = 2
