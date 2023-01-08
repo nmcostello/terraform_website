@@ -57,7 +57,7 @@ resource "aws_lb" "web" {
   name            = "${var.project}-lb"
   security_groups = [aws_security_group.lb.id]
 
-  subnets = [for subnet in aws_subnet.public : subnet.id]
+  subnets = var.public_subnets
 
   # Add any other required configuration for the load balancer here
 
@@ -86,11 +86,6 @@ resource "aws_lb_target_group" "web" {
   port        = 443
   protocol    = "HTTP"
   target_type = "instance"
-
-  # Add the web server autoscaling group as a target
-  targets {
-    id = aws_autoscaling_group.web.arn
-  }
 }
 
 # Create an SSL certificate
