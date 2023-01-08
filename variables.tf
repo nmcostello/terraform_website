@@ -4,7 +4,7 @@ variable "project" {
   default     = "hello-world"
 }
 
-variable "vpc" {
+variable "vpc_id" {
   type        = string
   description = "VPC to deploy to"
 }
