@@ -17,7 +17,10 @@ jobs:
 
       - name: print runner info
         run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
+      
+      - name: print env
         run: echo "${env}"
+        
       - name: format
         id: fmt
         run: terraform fmt -check
