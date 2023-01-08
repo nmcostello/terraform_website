@@ -21,6 +21,9 @@ jobs:
       - name: print env
         run: echo "${env}"
         
+      - name: testing secrets
+        run: echo "$${{ secrets.VPC_ID }}"
+        
       - name: format
         id: fmt
         run: terraform fmt -check
