@@ -26,8 +26,11 @@ jobs:
 
       - name: initialize
         id: init
-        run: terraform init -backend-config="access_key=${{ env.AWS_ACCESS_KEY_ID }}" -backend-config="secret_key=${{ env.AWS_SECRET_ACCESS_KEY }}" 
--backend-config="region=us-east-1" 
+        run: |
+        terraform init \
+          -backend-config="access_key=${{ env.AWS_ACCESS_KEY_ID }}" \
+          -backend-config="secret_key=${{ env.AWS_SECRET_ACCESS_KEY }}" \
+          -backend-config="region=us-east-1" 
 
       - name: validate
         id: validate
