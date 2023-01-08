@@ -1,0 +1,23 @@
+name: Update Terraform docs on PR
+run-name: ${{ github.actor }} updated the Terraform docs.
+on: [pull-request]
+
+jobs:
+  docs:
+    on:
+      - pull_request
+    jobs:
+      docs:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Render terraform docs and push changes back to PR
+      uses: terraform-docs/gh-actions@main
+      with:
+        working-dir: .
+        output-file: README.md
+        output-method: inject
+        git-push: "true"
