@@ -11,18 +11,13 @@ jobs:
       TF_VAR_public_subnets: ${{ secrets.PUBLIC_SUBNETS }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TEST: ${{ secrets.TEST_SECRET }}
     steps:
       - uses: hashicorp/setup-terraform@v2
       - uses: actions/checkout@v3
 
       - name: print runner info
         run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
-      
-      - name: print env
-        run: echo "${env}"
-        
-      - name: testing secrets
-        run: echo "$${{ secrets.VPC_ID }}"
         
       - name: format
         id: fmt
