@@ -3,12 +3,14 @@ run-name: ${{ github.actor }} deployed the Terraform code to AWS.
 on: [push]
 
 jobs:
-  deploy-terraform-aws:
+  terraform:
     runs-on: ubuntu-latest
     steps:
       - uses: hashicorp/setup-terraform@v2
       - uses: actions/checkout@v3
-      - run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
+
+      - name: print runner info
+        run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
 
       - name: format
         id: fmt
@@ -26,3 +28,18 @@ jobs:
       - name: plan
         id: plan
         run: terraform plan
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Render terraform docs and push changes back to PR
+      uses: terraform-docs/gh-actions@main
+      with:
+        working-dir: .
+        output-file: README.md
+        output-method: inject
+        git-push: "true"
