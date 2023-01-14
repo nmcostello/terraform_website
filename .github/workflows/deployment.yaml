@@ -42,4 +42,4 @@ jobs:
         
       - name: plan
         id: plan
-        run: TF_LOG=debug terraform plan
+        run: terraform plan
