@@ -42,4 +42,4 @@ jobs:
         
       - name: plan
         id: plan
-        run: TF_LOG=debug terraform plan -var="private_subnets=$TF_VAR_private_subnets" -var="public_subnets=$TF_VAR_public_subnets" 
+        run: TF_LOG=debug terraform plan
