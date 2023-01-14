@@ -11,6 +11,29 @@ terraform {
   }
 }
 
+# Get public and private subnets
+data "aws_subnets" "private" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+
+  tags = {
+    Tier = "private"
+  }
+}
+
+data "aws_subnets" "public" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+
+  tags = {
+    Tier = "public"
+  }
+}
+
 
 
 # Configure the web server autoscaling group
@@ -19,7 +42,7 @@ resource "aws_autoscaling_group" "web" {
   min_size             = var.min_asg_size
   max_size             = var.max_asg_size
   desired_capacity     = var.desired_asg_size
-  vpc_zone_identifier  = var.private_subnets
+  vpc_zone_identifier  = toset(data.aws_subnets.private.ids)
   launch_configuration = aws_launch_configuration.web.name
 
   # Add any other required configuration for the autoscaling group here
@@ -57,7 +80,7 @@ resource "aws_lb" "web" {
   name            = "${var.project}-lb"
   security_groups = [aws_security_group.lb.id]
 
-  subnets = var.public_subnets
+  subnets = toset(data.aws_subnets.public.ids)
 
   # Add any other required configuration for the load balancer here
 

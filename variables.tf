@@ -9,16 +9,6 @@ variable "vpc_id" {
   description = "VPC to deploy to"
 }
 
-variable "public_subnets" {
-  type        = list(any)
-  description = "Public subnets for the LB"
-}
-
-variable "private_subnets" {
-  type        = list(any)
-  description = "Private subnets for the EC2s"
-}
-
 variable "instance_type" {
   type        = string
   description = "Instance type to use for the web server. Defaulted to a smaller one for testing."
