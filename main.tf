@@ -84,7 +84,6 @@ resource "aws_lb" "web" {
 data "aws_route53_zone" "public" {
   name         = var.domain
   private_zone = false
-  vpc_id       = var.vpc_id
 }
 
 resource "aws_acm_certificate" "lb" {
