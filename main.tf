@@ -42,7 +42,7 @@ resource "aws_autoscaling_group" "web" {
   desired_capacity     = var.desired_asg_size
   vpc_zone_identifier  = toset(data.aws_subnets.private.ids)
   launch_configuration = aws_launch_configuration.web.name
-  load_balancers       = [aws_lb.web]
+  load_balancers       = [aws_lb.web.name]
 
   lifecycle {
     create_before_destroy = true
