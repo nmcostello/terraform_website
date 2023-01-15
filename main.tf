@@ -70,7 +70,7 @@ resource "aws_autoscaling_group" "web" {
 resource "aws_launch_configuration" "web" {
   name = "${var.project}-lc"
   # image_id                    = data.aws_ami.packer
-  image_id                    = ami-02fe94dee086c0c37
+  image_id                    = "ami-02fe94dee086c0c37"
   instance_type               = var.instance_type
   security_groups             = [aws_security_group.web.id]
   associate_public_ip_address = false
