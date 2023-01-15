@@ -59,7 +59,7 @@ resource "aws_lb_listener" "https" {
   port              = 443
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate.lb.arn
+  certificate_arn   = aws_acm_certificate_validation.default.certificate_arn
 
   default_action {
     type             = "forward"
