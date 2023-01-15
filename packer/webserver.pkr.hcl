@@ -38,12 +38,12 @@ build {
   ]
 
   provisioner "file" {
-    source      = "./packer/index.html"
+    source      = "index.html"
     destination = "/tmp/index.html"
   }
 
   provisioner "file" {
-    source      = "./packer/website"
+    source      = "website"
     destination = "/tmp/website"
   }
 
