@@ -34,27 +34,49 @@ data "aws_subnets" "public" {
   }
 }
 
-
-
 # Configure the web server autoscaling group
 resource "aws_autoscaling_group" "web" {
   name                 = "${var.project}-asg"
   min_size             = var.min_asg_size
   max_size             = var.max_asg_size
   desired_capacity     = var.desired_asg_size
-  vpc_zone_identifier  = toset(data.aws_subnets.private.ids)
+  vpc_zone_identifier  = var.vpc_id
   launch_configuration = aws_launch_configuration.web.name
+  load_balancers       = aws_lb.web
 
-  # Add any other required configuration for the autoscaling group here
+  lifecycle {
+    create_before_destroy = true
+  }
+
+}
+
+data "aws_ami" "packer" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"]
 }
 
 # Configure the launch configuration for the web server
 resource "aws_launch_configuration" "web" {
   name                        = "${var.project}-lc"
-  image_id                    = "ami-12345678"
+  image_id                    = data.aws_ami.packer
   instance_type               = var.instance_type
   security_groups             = [aws_security_group.web.id]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   # Add any other required configuration for the launch configuration here
 }
@@ -64,7 +86,21 @@ resource "aws_security_group" "web" {
   name        = "${var.project}-sg"
   description = "Security group for the web servers"
 
-  # Add any required ingress/egress rules here
+  # Allow ingress only from the LB
+  ingress {
+    description     = "Traffic from LB"
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = aws_security_group.lb.id
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 # Create a security group for the load balancer
@@ -73,6 +109,21 @@ resource "aws_security_group" "lb" {
   description = "Security group for the load balancer"
 
   # Add any required ingress/egress rules here
+  ingress {
+    description = "Only allow https traffic"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 }
 
 # Create the load balancer
@@ -106,7 +157,7 @@ resource "aws_lb_listener" "web" {
 # Create a target group for the web server
 resource "aws_lb_target_group" "web" {
   name        = var.project
-  port        = 443
+  port        = 8080
   protocol    = "HTTP"
   target_type = "instance"
 }
