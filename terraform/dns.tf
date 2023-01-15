@@ -5,7 +5,10 @@ data "aws_route53_zone" "public" {
 
 resource "aws_acm_certificate" "lb" {
   domain_name               = var.domain
-  subject_alternative_names = ["*.${var.domain}"]
+  subject_alternative_names = [
+    "*.${var.domain}",
+    aws_lb.web.dns_name
+    ]
   validation_method         = "DNS"
 
   lifecycle {
