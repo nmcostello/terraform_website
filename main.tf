@@ -114,7 +114,7 @@ resource "aws_route53_record" "lb" {
   zone_id = data.aws_route53_zone.public.zone_id
   name    = "${var.domain}.${data.aws_route53_zone.public.name}"
   type    = "A"
-  records = [aws_lb.web.dns_name]
+  records = [aws_lb.web.private_ipv4_address]
   ttl     = "120"
 }
 
