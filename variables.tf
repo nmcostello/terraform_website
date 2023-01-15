@@ -9,6 +9,11 @@ variable "vpc_id" {
   description = "VPC to deploy to"
 }
 
+variable "domain" {
+  type        = string
+  description = "Domain to deploy webservers to"
+}
+
 variable "instance_type" {
   type        = string
   description = "Instance type to use for the web server. Defaulted to a smaller one for testing."

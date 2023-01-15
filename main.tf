@@ -82,23 +82,26 @@ resource "aws_lb" "web" {
 }
 
 resource "aws_acm_certificate" "lb" {
-  domain_name               = "noah.costello.io"
-  subject_alternative_names = ["*.noah.costello.io"]
+  domain_name               = var.domain
+  subject_alternative_names = ["*.${var.domain}"]
   validation_method         = "DNS"
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_route53_zone" "public" {
-  name = "noah.costello.io"
+data "aws_route53_zone" "public" {
+  name         = var.domain
+  private_zone = false
+  vpc_id       = var.vpc_id
+
 }
 
 resource "aws_route53_record" "validation" {
   zone_id = aws_route53_zone.public.zone_id
-  name    = aws_acm_certificate.lb.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.lb.domain_validation_options.0.resource_record_type
-  records = [aws_acm_certificate.lb.domain_validation_options.0.resource_record_value]
+  name    = aws_acm_certificate.lb.domain_validation_options.resource_record_name
+  type    = aws_acm_certificate.lb.domain_validation_options.resource_record_type
+  records = [aws_acm_certificate.lb.domain_validation_options.resource_record_value]
   ttl     = "300"
 }
 
