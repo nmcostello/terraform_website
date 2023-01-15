@@ -29,7 +29,7 @@ resource "aws_acm_certificate_validation" "default" {
 # route53 record pointing to lb 
 resource "aws_route53_record" "lb" {
   zone_id = data.aws_route53_zone.public.zone_id
-  name    = var.domain
+  name    = "challenge.${var.domain}"
   type    = "CNAME"
   records = [aws_lb.web.dns_name]
   ttl     = "120"
