@@ -102,6 +102,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.web.arn
   port              = 443
   ssl_policy        = "ELBSecurityPolicy-2016-08"
+  protocol = "HTTPS"
 
   default_action {
     type             = "forward"
@@ -131,6 +132,10 @@ resource "aws_autoscaling_group" "web" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_lb.web
+  ]
 
 }
 
