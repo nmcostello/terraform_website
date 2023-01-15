@@ -114,11 +114,7 @@ resource "aws_route53_record" "lb" {
   zone_id = data.aws_route53_zone.public.zone_id
   name    = "${var.domain}.${data.aws_route53_zone.public.name}"
   type    = "A"
-  alias {
-    name                   = aws_lb.lb.dns_name
-    zone_id                = aws_lb.lb.zone_id
-    evaluate_target_health = false
-  }
+  records = [aws_lb.web.dns_name]
 }
 
 # Enable redirect 80->443
