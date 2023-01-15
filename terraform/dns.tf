@@ -5,10 +5,7 @@ data "aws_route53_zone" "public" {
 
 resource "aws_acm_certificate" "lb" {
   domain_name               = var.domain
-  subject_alternative_names = [
-    "*.${var.domain}",
-    aws_lb.web.dns_name
-    ]
+  subject_alternative_names = ["*.${var.domain}"]
   validation_method         = "DNS"
 
   lifecycle {
@@ -21,7 +18,7 @@ resource "aws_route53_record" "validation" {
   name    = tolist(aws_acm_certificate.lb.domain_validation_options)[0].resource_record_name
   type    = tolist(aws_acm_certificate.lb.domain_validation_options)[0].resource_record_type
   records = [tolist(aws_acm_certificate.lb.domain_validation_options)[0].resource_record_value]
-  ttl     = "120"
+  ttl     = "300"
 }
 
 resource "aws_acm_certificate_validation" "default" {
@@ -35,5 +32,5 @@ resource "aws_route53_record" "lb" {
   name    = "challenge.${var.domain}"
   type    = "CNAME"
   records = [aws_lb.web.dns_name]
-  ttl     = "120"
+  ttl     = "300"
 }
