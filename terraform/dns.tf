@@ -25,3 +25,12 @@ resource "aws_acm_certificate_validation" "default" {
   certificate_arn         = aws_acm_certificate.lb.arn
   validation_record_fqdns = [aws_route53_record.validation.fqdn]
 }
+
+# route53 record pointing to lb 
+resource "aws_route53_record" "lb" {
+  zone_id = data.aws_route53_zone.public.zone_id
+  name    =  "data.aws_route53_zone.public.name"
+  type    = "CNAME"
+  records = [aws_lb.web.dns_name]
+  ttl     = "120"
+}

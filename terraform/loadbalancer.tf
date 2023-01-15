@@ -36,14 +36,6 @@ resource "aws_lb" "web" {
   subnets         = toset(data.aws_subnets.public.ids)
   # Add any other required configuration for the load balancer here
 }
-# route53 record pointing to lb 
-resource "aws_route53_record" "lb" {
-  zone_id = data.aws_route53_zone.public.zone_id
-  name    = "${var.domain}.${data.aws_route53_zone.public.name}"
-  type    = "CNAME"
-  records = [aws_lb.web.dns_name]
-  ttl     = "120"
-}
 
 # Enable redirect 80->443
 resource "aws_lb_listener" "http" {
