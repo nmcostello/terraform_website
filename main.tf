@@ -50,26 +50,27 @@ resource "aws_autoscaling_group" "web" {
 
 }
 
-data "aws_ami" "packer" {
-  most_recent = true
+# data "aws_ami" "packer" {
+#   most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
-  }
+#   filter {
+#     name   = "name"
+#     values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
+#   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+#   filter {
+#     name   = "virtualization-type"
+#     values = ["hvm"]
+#   }
 
-  owners = ["099720109477"]
-}
+#   owners = ["099720109477"]
+# }
 
 # Configure the launch configuration for the web server
 resource "aws_launch_configuration" "web" {
-  name                        = "${var.project}-lc"
-  image_id                    = data.aws_ami.packer
+  name = "${var.project}-lc"
+  # image_id                    = data.aws_ami.packer
+  image_id                    = ami-02fe94dee086c0c37
   instance_type               = var.instance_type
   security_groups             = [aws_security_group.web.id]
   associate_public_ip_address = false
@@ -92,7 +93,7 @@ resource "aws_security_group" "web" {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    security_groups = aws_security_group.lb.id
+    security_groups = [aws_security_group.lb.id]
   }
 
   egress {
