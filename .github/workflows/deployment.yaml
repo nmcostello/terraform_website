@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} deployed the Terraform code to AWS.
 on: [push]
 
 jobs:
-  terraform:
+  packer:
     runs-on: ubuntu-latest
     env:
       TF_VAR_vpc_id: ${{ secrets.VPC_ID }}
@@ -11,45 +11,70 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/packer-github-actions@master
       - uses: actions/checkout@v3
 
-      - name: print runner info
-        run: echo "OS=${{ runner.os }} BRANCH=${{ github.ref }} REPO=${{ github.repository }}"
-        working-directory: ./terraform
-
-      - name: print secret length
-        run: |
-          echo "$AWS_ACCESS_KEY_ID"
-          echo "${#AWS_ACCESS_KEY_ID}"
-        working-directory: ./terraform
-        
-      - name: format
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-        working-directory: ./terraform
-
+      # Initialize Packer templates
       - name: initialize
-        id: init
-        run: |
-          terraform init \
-            -backend-config="access_key=$AWS_ACCESS_KEY_ID" \
-            -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY" \
-            -backend-config="region=us-east-1" 
-        working-directory: ./terraform
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
 
+      # validate templates
       - name: validate
-        id: validate
-        run: terraform validate
-        working-directory: ./terraform
-        
-      - name: plan
-        id: plan
-        run: terraform plan
-        working-directory: ./terraform
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: validate
+          arguments: -syntax-only
+          target: ./packer/webserver.pkr.hcl
 
-      - name:
-        id: apply
-        run: terraform apply -auto-approve
-        working-directory: ./terraform
+      # build artifact
+      - name: build
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: build
+          arguments: "-color=false -on-error=abort"
+          target: ./packer/webserver.pkr.hcl
+        env:
+          PACKER_LOG: 1
+
+  # terraform:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     TF_VAR_vpc_id: ${{ secrets.VPC_ID }}
+  #     TF_VAR_domain: ${{ secrets.TF_VAR_domain }}
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #   steps:
+  #     - uses: hashicorp/setup-terraform@v2
+  #     - uses: actions/checkout@v3
+        
+  #     - name: format
+  #       id: fmt
+  #       run: terraform fmt -check
+  #       continue-on-error: true
+  #       working-directory: ./terraform
+
+  #     - name: initialize
+  #       id: init
+  #       run: |
+  #         terraform init \
+  #           -backend-config="access_key=$AWS_ACCESS_KEY_ID" \
+  #           -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY" \
+  #           -backend-config="region=us-east-1" 
+  #       working-directory: ./terraform
+
+  #     - name: validate
+  #       id: validate
+  #       run: terraform validate
+  #       working-directory: ./terraform
+        
+  #     - name: plan
+  #       id: plan
+  #       run: terraform plan
+  #       working-directory: ./terraform
+
+  #     - name:
+  #       id: apply
+  #       run: terraform apply -auto-approve
+  #       working-directory: ./terraform
