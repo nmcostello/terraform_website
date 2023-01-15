@@ -60,7 +60,7 @@ build {
       "echo Creating site directory...",
       "sudo mkdir -p /var/www/website",
       "sudo cp /tmp/index.html /var/www/website/index.html",
-      "sudo cp website /etc/nginx/site-enabled/website",
+      "sudo cp /tmp/website /etc/nginx/site-enabled/website",
       "sudo service nginx enable",
       "sudo service nginx restart",
     ]
