@@ -18,7 +18,7 @@ jobs:
         uses: hashicorp/packer-github-actions@master
         with:
           command: init
-        working-directory: ./packer
+          working-directory: ./packer
 
       # validate templates
       - name: validate
@@ -27,7 +27,7 @@ jobs:
           command: validate
           arguments: -syntax-only
           target: webserver.pkr.hcl
-        working-directory: ./packer
+          working-directory: ./packer
 
       # build artifact
       - name: build
@@ -36,9 +36,9 @@ jobs:
           command: build
           arguments: "-color=false -on-error=abort"
           target: webserver.pkr.hcl
+          working-directory: ./packer
         env:
           PACKER_LOG: 1
-        working-directory: ./packer
 
   # terraform:
   #   runs-on: ubuntu-latest
