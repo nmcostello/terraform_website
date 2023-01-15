@@ -81,6 +81,32 @@ resource "aws_lb" "web" {
   # Add any other required configuration for the load balancer here
 }
 
+resource "aws_acm_certificate" "lb" {
+  domain_name               = "noah.costello.io"
+  subject_alternative_names = ["*.noah.costello.io"]
+  validation_method         = "DNS"
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+data "aws_route53_zone" "public" {
+  name = "noah.costello.io"
+}
+
+resource "aws_route53_record" "validation" {
+  zone_id = aws_route53_zone.public.zone_id
+  name    = aws_acm_certificate.lb.domain_validation_options.0.resource_record_name
+  type    = aws_acm_certificate.lb.domain_validation_options.0.resource_record_type
+  records = [aws_acm_certificate.lb.domain_validation_options.0.resource_record_value]
+  ttl     = "300"
+}
+
+resource "aws_acm_certificate_validation" "default" {
+  certificate_arn         = aws_acm_certificate.lb.arn
+  validation_record_fqdns = [aws_route53_record.validation.fqdn]
+}
+
 # Enable redirect 80->443
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.web.arn
@@ -102,7 +128,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.web.arn
   port              = 443
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  protocol = "HTTPS"
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
