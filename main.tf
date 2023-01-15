@@ -131,7 +131,7 @@ resource "aws_security_group" "lb" {
 resource "aws_lb" "web" {
   name            = "${var.project}-lb"
   security_groups = [aws_security_group.lb.id]
-  subnets = toset(data.aws_subnets.public.ids)
+  subnets         = toset(data.aws_subnets.public.ids)
   # Add any other required configuration for the load balancer here
 }
 
@@ -156,6 +156,11 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.web.arn
   port              = 443
   ssl_policy        = "ELBSecurityPolicy-2016-08"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web.arn
+  }
 }
 
 # Create a target group for the web server
@@ -164,14 +169,5 @@ resource "aws_lb_target_group" "web" {
   port        = 8080
   protocol    = "HTTP"
   target_type = "instance"
-}
-
-# Create an SSL certificate
-resource "aws_acm_certificate" "ssl" {
-  domain_name       = aws_lb.web.dns_name
-  validation_method = "DNS"
-
-  depends_on = [
-    aws_lb.web
-  ]
+  vpc_id      = var.vpc_id
 }
