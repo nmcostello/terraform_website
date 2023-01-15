@@ -81,6 +81,12 @@ resource "aws_lb" "web" {
   # Add any other required configuration for the load balancer here
 }
 
+data "aws_route53_zone" "public" {
+  name         = var.domain
+  private_zone = false
+  vpc_id       = var.vpc_id
+}
+
 resource "aws_acm_certificate" "lb" {
   domain_name               = var.domain
   subject_alternative_names = ["*.${var.domain}"]
@@ -90,23 +96,29 @@ resource "aws_acm_certificate" "lb" {
   }
 }
 
-data "aws_route53_zone" "public" {
-  name         = var.domain
-  private_zone = false
-  vpc_id       = var.vpc_id
-}
-
 resource "aws_route53_record" "validation" {
   zone_id = data.aws_route53_zone.public.zone_id
-  name    = aws_acm_certificate.lb.domain_validation_options.resource_record_name
-  type    = aws_acm_certificate.lb.domain_validation_options.resource_record_type
-  records = [aws_acm_certificate.lb.domain_validation_options.resource_record_value]
-  ttl     = "300"
+  name    = tolist(aws_acm_certificate.lb.domain_validation_options)[0].resource_record_name
+  type    = tolist(aws_acm_certificate.lb.domain_validation_options)[0].resource_record_type
+  records = [tolist(aws_acm_certificate.lb.domain_validation_options)[0].resource_record_value]
+  ttl     = "120"
 }
 
 resource "aws_acm_certificate_validation" "default" {
   certificate_arn         = aws_acm_certificate.lb.arn
   validation_record_fqdns = [aws_route53_record.validation.fqdn]
+}
+
+# route53 record pointing to lb 
+resource "aws_route53_record" "lb" {
+  zone_id = data.aws_route53_zone.public.zone_id
+  name    = "${var.domain}.${data.aws_route53_zone.public.name}"
+  type    = "A"
+  alias {
+    name                   = aws_lb.lb.dns_name
+    zone_id                = aws_lb.lb.zone_id
+    evaluate_target_health = false
+  }
 }
 
 # Enable redirect 80->443
