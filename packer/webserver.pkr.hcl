@@ -28,8 +28,9 @@ source "amazon-ebs" "ubuntu" {
     }
     most_recent = true
     owners      = ["099720109477"]
-    ssh_username = "ubuntu"
+    
   }
+  ssh_username = "ubuntu"
 }
 
 build {
