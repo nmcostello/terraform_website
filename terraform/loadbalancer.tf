@@ -5,9 +5,17 @@ resource "aws_security_group" "lb" {
 
   # Add any required ingress/egress rules here
   ingress {
-    description = "Only allow https traffic"
+    description = "Open HTTPS traffic"
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Open HTTP traffic for redirect"
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
