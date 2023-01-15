@@ -90,7 +90,7 @@ resource "aws_acm_certificate" "lb" {
   }
 }
 
-data "aws_route53_zone" "public" {
+resource "aws_route53_zone" "public" {
   name = "noah.costello.io"
 }
 
