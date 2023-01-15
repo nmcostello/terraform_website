@@ -84,7 +84,7 @@ resource "aws_launch_configuration" "web" {
 
 # Create a security group for the web servers
 resource "aws_security_group" "web" {
-  name        = "${var.project}-sg"
+  name        = "${var.project}-web-sg"
   description = "Security group for the web servers"
 
   # Allow ingress only from the LB
@@ -106,7 +106,7 @@ resource "aws_security_group" "web" {
 
 # Create a security group for the load balancer
 resource "aws_security_group" "lb" {
-  name        = "${var.project}-sg"
+  name        = "${var.project}-lb-sg"
   description = "Security group for the load balancer"
 
   # Add any required ingress/egress rules here
@@ -131,18 +131,14 @@ resource "aws_security_group" "lb" {
 resource "aws_lb" "web" {
   name            = "${var.project}-lb"
   security_groups = [aws_security_group.lb.id]
-
   subnets = toset(data.aws_subnets.public.ids)
-
   # Add any other required configuration for the load balancer here
-
 }
-# Enable HTTPS listener on port 443
-resource "aws_lb_listener" "web" {
+
+# Enable redirect 80->443
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.web.arn
   port              = 80
-  certificate_arn   = aws_acm_certificate.ssl.arn
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
 
   default_action {
     type = "redirect"
@@ -153,6 +149,13 @@ resource "aws_lb_listener" "web" {
       status_code = "HTTP_301"
     }
   }
+}
+
+# Enable HTTPS listener on port 443
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.web.arn
+  port              = 443
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
 }
 
 # Create a target group for the web server
