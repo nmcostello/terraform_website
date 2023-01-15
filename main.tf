@@ -90,6 +90,7 @@ resource "aws_acm_certificate" "lb" {
   domain_name               = var.domain
   subject_alternative_names = ["*.${var.domain}"]
   validation_method         = "DNS"
+
   lifecycle {
     create_before_destroy = true
   }
@@ -114,6 +115,7 @@ resource "aws_route53_record" "lb" {
   name    = "${var.domain}.${data.aws_route53_zone.public.name}"
   type    = "A"
   records = [aws_lb.web.dns_name]
+  ttl     = "120"
 }
 
 # Enable redirect 80->443
@@ -163,7 +165,7 @@ resource "aws_autoscaling_group" "web" {
   desired_capacity     = var.desired_asg_size
   vpc_zone_identifier  = toset(data.aws_subnets.private.ids)
   launch_configuration = aws_launch_configuration.web.name
-  load_balancers       = [aws_lb.web.name]
+  target_group_arns       = [aws_lb_target_group.web.arn]
 
   lifecycle {
     create_before_destroy = true
