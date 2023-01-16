@@ -20,9 +20,9 @@ resource "aws_autoscaling_group" "web" {
   min_size             = var.min_asg_size
   max_size             = var.max_asg_size
   desired_capacity     = var.desired_asg_size
-  vpc_zone_identifier  = toset(data.aws_subnets.private.ids)
+  vpc_zone_identifier  = toset(data.aws_subnets.public.ids)
   launch_configuration = aws_launch_configuration.web.name
-  target_group_arns       = [aws_lb_target_group.web.arn]
+  target_group_arns    = [aws_lb_target_group.web.arn]
 
   lifecycle {
     create_before_destroy = true
