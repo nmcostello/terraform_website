@@ -2,8 +2,8 @@
 
 #### Table of Contents
 [Overview](#overview)  
-[Directory layout](#directory-layout)
-[How to use](#how-to-use)
+[Directory layout](#directory-layout)  
+[How to use](#how-to-use)  
 [Architecture](#architecture)  
 
 ### Overview
