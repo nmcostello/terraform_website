@@ -2,14 +2,13 @@
 
 #### Table of Contents
 [Overview](#overview)  
-[Directory layout](#directory-layout)  
+[Directory layout](#directory-layout)
+[How to use](#how-to-use)
 [Architecture](#architecture)  
 
 ### Overview
 
-This project uses Packer and Terraform to create and configure a highly-availably webserver. 
-
-
+This project uses Packer and Terraform to create and configure a highly-available website. 
 
 ### Directory layout  
   - [.github/workflows](.github/workflows): hosts all the files relating to GitHub Actions.
@@ -28,6 +27,8 @@ This project uses Packer and Terraform to create and configure a highly-availabl
     - [variables.tf](terraform/variables.tf): variables files.
     - [webserver.tf](terraform/webserver.tf): contains code that deploys server, autoscaling group, and launch config
     - [outputs.tf](terraform/outputs.tf): outputs from Terraform deployment.
+    
+### How to use
 
 ### Architecture
 ![Architecture](arch.excalidraw.png)
