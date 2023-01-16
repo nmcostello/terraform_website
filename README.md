@@ -8,7 +8,14 @@
 
 ### Overview
 
-This project uses Packer and Terraform to create and configure a highly-available website. 
+This project uses Packer and Terraform to create and configure a highly-available website. The project has the following components:
+- `GitHub Actions`: the workflows are used to validate, test, and deploy the Packer, Terraform, and documentation code.
+- `Packer`: creates an Ubuntu AMI and installs and configures NGINX on the image that is later used in the Terraform step.
+- `Terraform`: IaC used to deploy resources to AWS:
+  - `Route53`: DNS and CNAME records.
+  - `ACM`: SSL Cert for HTTPS.
+  - `Application Load Balancer`: balances load to webservers, redirects HTTP -> HTTPS.
+  - `Autoscaling Group` using `Packer` AMI for the NGINX webservers.
 
 ### Directory layout  
   - [.github/workflows](.github/workflows): hosts all the files relating to GitHub Actions.
