@@ -61,7 +61,7 @@ build {
       "sudo mkdir -p /var/www/website",
       "sudo cp /tmp/index.html /var/www/website/index.html",
       "sudo cp /tmp/website /etc/nginx/sites-enabled/website",
-      "sudo service nginx enable",
+      "sudo systemctl enable nginx",
       "sudo service nginx restart",
     ]
   }
