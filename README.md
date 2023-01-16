@@ -1,7 +1,7 @@
 ## Deploy a highly-available webserver
 
 #### Table of Contents
-[Overview](#overview)
+[Overview](#overview)  
 [Directory layout](#directory-layout)  
 [Architecture](#architecture)  
 
