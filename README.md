@@ -1,6 +1,15 @@
 ## Deploy a highly-available webserver
 
+#### Table of Contents
+[Overview](#overview)
+[Directory layout](#directory-layout)  
+[Architecture](#architecture)  
+
+### Overview
+
 This project uses Packer and Terraform to create and configure a highly-availably webserver. 
+
+
 
 ### Directory layout  
   - [.github/workflows](.github/workflows): hosts all the files relating to GitHub Actions.
