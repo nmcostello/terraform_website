@@ -3,45 +3,7 @@ run-name: ${{ github.actor }} deployed the Terraform code to AWS.
 on: [push]
 
 jobs:
-  packer:
-    runs-on: ubuntu-latest
-    env:
-      TF_VAR_vpc_id: ${{ secrets.VPC_ID }}
-      TF_VAR_domain: ${{ secrets.TF_VAR_domain }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    steps:
-      - uses: actions/checkout@v3
-
-      # Initialize Packer templates
-      - name: initialize
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: init
-          working_directory: ./packer
-
-      # validate templates
-      - name: validate
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          arguments: -syntax-only
-          target: webserver.pkr.hcl
-          working_directory: ./packer
-
-      # build artifact
-      - name: build
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: build
-          arguments: "-color=false -on-error=abort"
-          target: webserver.pkr.hcl
-          working_directory: ./packer
-        env:
-          PACKER_LOG: 1
-
   terraform:
-    needs: packer
     runs-on: ubuntu-latest
     env:
       TF_VAR_vpc_id: ${{ secrets.VPC_ID }}
