@@ -36,8 +36,6 @@ resource "aws_autoscaling_group" "web" {
 
 # Configure the launch configuration for the web server
 resource "aws_launch_configuration" "web" {
-  name = "${var.project}-lc"
-  # image_id                    = data.aws_ami.packer
   image_id                    = data.aws_ami.packer.image_id
   instance_type               = var.instance_type
   security_groups             = [aws_security_group.web.id]
