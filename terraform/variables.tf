@@ -14,11 +14,6 @@ variable "domain" {
   description = "Domain to deploy webservers to"
 }
 
-variable "owner_id" {
-  type = string
-  description = "Owner ID of account that AMI was built to"
-}
-
 variable "instance_type" {
   type        = string
   description = "Instance type to use for the web server. Defaulted to a smaller one for testing."

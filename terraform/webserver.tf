@@ -11,7 +11,7 @@ data "aws_ami" "packer" {
     values = ["hvm"]
   }
 
-  owners = [var.owner_id]
+  owners = ["self"]
 }
 
 # Configure the web server autoscaling group
