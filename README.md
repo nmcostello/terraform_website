@@ -1,4 +1,4 @@
-## Deploy a highly-available webserver
+# Deploy a highly-available webserver
 
 #### Table of Contents
 [Overview](#overview)  
@@ -6,7 +6,7 @@
 [How to use](#how-to-use)  
 [Architecture](#architecture)  
 
-### Overview
+## Overview
 
 This project uses Packer and Terraform to create and configure a highly-available website. The project has the following components:
 - `GitHub Actions`: the workflows are used to validate, test, and deploy the Packer, Terraform, and documentation code.
@@ -17,7 +17,7 @@ This project uses Packer and Terraform to create and configure a highly-availabl
   - `Application Load Balancer`: balances load to webservers, redirects HTTP -> HTTPS.
   - `Autoscaling Group` using `Packer` AMI for the NGINX webservers.
 
-### Directory layout  
+## Directory layout  
   - [.github/workflows](.github/workflows): hosts all the files relating to GitHub Actions.
     - [deployment.yaml](.github/workflows/deployment.yaml): contains the code for the job that deploys Terraform.
     - [docs.yaml](.github/workflows/docs.yaml): contains the code for the job that builds the Terraform docs.
@@ -35,7 +35,7 @@ This project uses Packer and Terraform to create and configure a highly-availabl
     - [webserver.tf](terraform/webserver.tf): contains code that deploys server, autoscaling group, and launch config
     - [outputs.tf](terraform/outputs.tf): outputs from Terraform deployment.
     
-### How to use
+## How to use
 
-### Architecture
+## Architecture
 ![Architecture](arch.excalidraw.png)
