@@ -51,6 +51,7 @@ jobs:
         id: get_url
         run: |
           url=$(terraform output url)
+          echo $url
           echo 'URL<<EOF' >> $GITHUB_ENV
           echo $url >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
