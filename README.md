@@ -55,7 +55,7 @@ This project uses Packer and Terraform to create and configure a highly-availabl
   | ---------------------- | ------------------------------------------------- |  
   | AWS_ACCESS_KEY_ID      | Access key for IAM user in your account.          |  
   | AWS_SECRET_ACCESS_KEY  | Secret access key for IAM user in your account.   |  
-  | TF_VAR_DOMAIN          | Domain name that you own and want to deploy to.   |  
+  | DOMAIN          | Domain name that you own and want to deploy to.   |  
   | VPC_ID                 | VPC ID to deploy to.                              |  
 
 
