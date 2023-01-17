@@ -52,7 +52,7 @@ jobs:
         run: |
           url=$(terraform output url)
           echo 'URL<<EOF' >> $GITHUB_ENV
-          echo $(url) >> $GITHUB_ENV
+          echo $url >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
         working-directory: ./terraform
 
