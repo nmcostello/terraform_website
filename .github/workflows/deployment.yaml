@@ -49,7 +49,9 @@ jobs:
 
       - name: get_url
         id: get_url
-        run: export URL=$(terraform output url)
+        run: |
+          terraform output url
+          export URL=$(terraform output url)
 
       - name: validate_config
         id: validate_config
