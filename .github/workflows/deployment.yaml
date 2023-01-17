@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   terraform:
-    needs: go-tests
     runs-on: ubuntu-latest
     env:
       TF_VAR_vpc_id: ${{ secrets.VPC_ID }}
