@@ -4,16 +4,14 @@ import os
 def main(url: str):
     # Request https
     httpsUrl = f"https://{url}"
-    httpsRequest = requests.get(httpsUrl)
+    httpsRequest = requests.get(httpsUrl, allow_redirects=False)
     # Request http
     httpUrl = f"http://{url}"
-    httpRequest = requests.get(httpUrl)
+    httpRequest = requests.get(httpUrl, allow_redirects=False)
 
-    print("HTTP= ", httpRequest.status_code)
-    print("HTTPS= ",httpRequest.status_code)
+    print("HTTP=", httpRequest.status_code)
+    print("HTTPS=",httpRequest.status_code)
 
 if __name__ == "__main__":
-
-    print(os.environ.get('URL'), flush=True)
     url = os.environ.get('URL')
     main(url)
