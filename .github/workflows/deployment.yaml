@@ -12,6 +12,9 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+          
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
