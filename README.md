@@ -34,6 +34,8 @@ This project uses Packer and Terraform to create and configure a highly-availabl
     - [variables.tf](terraform/variables.tf): variables files.
     - [webserver.tf](terraform/webserver.tf): contains code that deploys server, autoscaling group, and launch config
     - [outputs.tf](terraform/outputs.tf): outputs from Terraform deployment.
+  - [test](test): test directory
+    - [validate.py](test/validate.py): Python script to validate webserver configuration.
     
 ## How to use
 #### Prerequisites
