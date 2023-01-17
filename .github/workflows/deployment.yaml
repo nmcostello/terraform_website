@@ -50,7 +50,9 @@ jobs:
       - name: get_url
         id: get_url
         run: |
-          echo "URL=$(terraform output url)" >> $GITHUB_ENV
+          echo 'URL<<EOF' >> $GITHUB_ENV
+          echo $(terraform output url) >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
         working-directory: ./terraform
 
       - name: validate_config
