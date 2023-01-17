@@ -52,6 +52,7 @@ jobs:
         run: |
           terraform output url
           export URL=$(terraform output url)
+        working-directory: ./terraform
 
       - name: validate_config
         id: validate_config
