@@ -14,7 +14,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
-          
+
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
@@ -58,6 +58,6 @@ jobs:
       - name: validate_config
         id: validate_config
         run: |
-          pip install requests
+          pip install requests bs4
           python3 validate.py
         working-directory: ./test
