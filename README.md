@@ -39,9 +39,9 @@ This project uses Packer and Terraform to create and configure a highly-availabl
     
 ## How to use
 #### Prerequisites
-- Github Actions
-  - Github Account
-  - AWS Account
+- Github Account
+- AWS Account
+- A registered doamin
 - If you want to run this locally you will also need:
   - AWS CLI
   - Terraform CLI
@@ -49,7 +49,8 @@ This project uses Packer and Terraform to create and configure a highly-availabl
 
 #### Steps
 1. Fork the repo into your own GitHub Account
-2. Add the following secrets to your GitHub secrets: 
+2. Add the following secrets to your GitHub secrets:  
+    - or to a local `terraform.tfvars` file if you are running locally.
  
   | Secret                 | Description                                       |  
   | ---------------------- | ------------------------------------------------- |  
@@ -57,7 +58,8 @@ This project uses Packer and Terraform to create and configure a highly-availabl
   | AWS_SECRET_ACCESS_KEY  | Secret access key for IAM user in your account.   |  
   | DOMAIN          | Domain name that you own and want to deploy to.   |  
   | VPC_ID                 | VPC ID to deploy to.                              |  
-
+3. Push a commit, and the pipeline will run. 
+4. You will have a new site on `https://challenge.${domain}`
 
 ## Architecture
 ![Architecture](arch.excalidraw.png)
