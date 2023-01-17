@@ -11,6 +11,7 @@ def main(url: str):
 
     print("HTTP= ", httpRequest.status_code)
     print("HTTPS= ",httpRequest.status_code)
+    
 if __name__ == "__main__":
 
     url = os.environ.get('URL')

@@ -53,6 +53,6 @@ jobs:
         run: export URL=$(terraform output url)
 
       - name:
-        id:
+        id: validate_config
         run: python3 validate.py
         working-directory: ./test
