@@ -53,5 +53,7 @@ jobs:
 
       - name:
         id: validate_config
-        run: python3 validate.py
+        run: |
+          pip install requests
+          python3 validate.py
         working-directory: ./test
