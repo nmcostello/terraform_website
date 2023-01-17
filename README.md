@@ -34,6 +34,8 @@ This project uses Packer and Terraform to create and configure a highly-availabl
     - [variables.tf](terraform/variables.tf): variables files.
     - [webserver.tf](terraform/webserver.tf): contains code that deploys server, autoscaling group, and launch config
     - [outputs.tf](terraform/outputs.tf): outputs from Terraform deployment.
+  - [test](test): test directory
+    - [validate.py](test/validate.py): Python script to validate webserver configuration.
     
 ## How to use
 #### Prerequisites
@@ -53,7 +55,7 @@ This project uses Packer and Terraform to create and configure a highly-availabl
   | ---------------------- | ------------------------------------------------- |  
   | AWS_ACCESS_KEY_ID      | Access key for IAM user in your account.          |  
   | AWS_SECRET_ACCESS_KEY  | Secret access key for IAM user in your account.   |  
-  | TF_VAR_DOMAIN          | Domain name that you own and want to deploy to.   |  
+  | DOMAIN          | Domain name that you own and want to deploy to.   |  
   | VPC_ID                 | VPC ID to deploy to.                              |  
 
 
