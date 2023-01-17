@@ -14,5 +14,6 @@ def main(url: str):
 
 if __name__ == "__main__":
 
+    print(os.environ.get('URL'), flush=True)
     url = os.environ.get('URL')
     main(url)
