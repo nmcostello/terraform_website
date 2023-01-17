@@ -42,16 +42,16 @@ jobs:
         run: terraform plan
         working-directory: ./terraform
 
-      - name:
+      - name: apply
         id: apply
         run: terraform apply -auto-approve
         working-directory: ./terraform
 
-      - name:
+      - name: get_url
         id: get_url
         run: export URL=$(terraform output url)
 
-      - name:
+      - name: validate_config
         id: validate_config
         run: |
           pip install requests
