@@ -1,6 +1,9 @@
 name: Deploy AWS Resources in Terraform
 run-name: ${{ github.actor }} deployed the Terraform code to AWS.
-on: [push]
+on:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   terraform:

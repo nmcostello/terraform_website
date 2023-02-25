@@ -1,8 +1,6 @@
 name: Build webserver AMI
 run-name: ${{ github.actor }} ran the scheduled job.
 on:
-  schedule:
-    - cron: '0 22 * * *'
   workflow_dispatch:
 
 jobs:
