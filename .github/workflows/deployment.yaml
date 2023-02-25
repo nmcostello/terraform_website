@@ -61,3 +61,8 @@ jobs:
           pip install requests bs4
           python3 validate.py
         working-directory: ./test
+
+      - name: destroy
+        id: destroy
+        run: terraform destroy --auto-approve
+        working-directory: ./terraform
